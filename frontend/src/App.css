@@ -1,1 +1,13 @@
+#header {
+  width: 100%;
+  height: 80px;
+  background-color: aqua;
 
+  display: flex;              /* włącz flexbox */
+  justify-content: center;    /* wyśrodkuj poziomo */
+  align-items: center;        /* wyśrodkuj pionowo */
+}
+
+#header h1 {
+  margin: 0; /* usuwa domyślną przerwę */
+}

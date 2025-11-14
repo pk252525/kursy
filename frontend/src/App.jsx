@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div id="header">Kursy Velo</div>
+      <div id="header"><h1>Kursy Velo</h1></div>
     </>
   )
 }
