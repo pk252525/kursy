@@ -1,12 +1,8 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
-
-  const kursy = ["Adam Coding","Meincrosoft Azure","Cisco", ];
-  const [count, setCount] = useState(0)
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:5000/hello")
@@ -18,10 +14,9 @@ function App() {
     <>
       <div id="header">
         <h1>{msg}</h1>
-        </div>
-      <div></div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
