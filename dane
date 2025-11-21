@@ -1,0 +1,67 @@
+INSERT INTO users (email, password_hash, role)
+VALUES
+('admin@example.com', 'hashed_admin_pass', 'ADMIN'),
+('krystian.kruzelit@example.com', 'hashed_password1', 'CUSTOMER'),
+('jan.jaruzelski@example.com', 'hashed_password2', 'CUSTOMER'),
+('maria.debe@example.com', 'hashed_password3', 'CUSTOMER');
+
+
+
+
+INSERT INTO courses (title, description, price_cents, category, difficulty, instructor)
+VALUES
+('Kurs Cisco', 'Kurs wprowadzający do programowania w Pythonie.', 49900, 'Programowanie', 'Beginner', 'Dr. Adam Malinowski'),
+('Zaawansowany SQL', 'Optymalizacja zapytań i projektowanie baz danych.', 79900, 'Bazy danych', 'Advanced', 'Prof. Katarzyna Zielińska'),
+('Frontend z React', 'Tworzenie aplikacji webowych w React.', 69900, 'Web Development', 'Intermediate', 'Michał Lewandowski'),
+('Machine Learning w praktyce', 'Uczenie maszynowe z przykładami w Pythonie.', 99900, 'AI/ML', 'Advanced', 'Dr. Piotr Kamiński');
+
+
+INSERT INTO lessons (course_id, title, content_url, lesson_order)
+VALUES
+
+((SELECT id FROM courses WHERE title='Kurs Cisco'), 'Wprowadzenie do Pythona', 'https://example.com/python/intro', 1),
+((SELECT id FROM courses WHERE title='Kurs Cisco'), 'Zmienne i typy danych', 'https://example.com/python/variables', 2),
+
+
+((SELECT id FROM courses WHERE title='Zaawansowany SQL'), 'Indeksy i optymalizacja', 'https://example.com/sql/indexes', 1),
+((SELECT id FROM courses WHERE title='Zaawansowany SQL'), 'Transakcje i blokady', 'https://example.com/sql/transactions', 2),
+
+-- Frontend z React((SELECT id FROM courses WHERE title='Frontend z React'), 'Podstawy JSX', 'https://example.com/react/jsx', 1),
+((SELECT id FROM courses WHERE title='Frontend z React'), 'Komponenty funkcyjne', 'https://example.com/react/components', 2);
+
+
+
+INSERT INTO enrollments (user_id, course_id)
+VALUES
+((SELECT id FROM users WHERE email='anna.kowalska@example.com'), (SELECT id FROM courses WHERE title='Kurs Cisco')),
+((SELECT id FROM users WHERE email='jan.nowak@example.com'), (SELECT id FROM courses WHERE title='Zaawansowany SQL')),
+((SELECT id FROM users WHERE email='maria.wisniewska@example.com'), (SELECT id FROM courses WHERE title='Frontend z React'));
+
+
+
+INSERT INTO transactions (user_id, course_id, amount_cents, status, stripe_payment_intent_id, stripe_checkout_session_id)
+VALUES
+((SELECT id FROM users WHERE email='anna.kowalska@example.com'), (SELECT id FROM courses WHERE title='Kurs Cisco'), 49900, 'succeeded', 'pi_12345', 'cs_12345'),
+((SELECT id FROM users WHERE email='jan.nowak@example.com'), (SELECT id FROM courses WHERE title='Zaawansowany SQL'), 79900, 'succeeded', 'pi_67890', 'cs_67890'),
+((SELECT id FROM users WHERE email='maria.wisniewska@example.com'), (SELECT id FROM courses WHERE title='Frontend z React'), 69900, 'pending', 'pi_11111', 'cs_11111');
+
+
+
+INSERT INTO cart_items (user_id, course_id)
+VALUES
+((SELECT id FROM users WHERE email='anna.kowalska@example.com'), (SELECT id FROM courses WHERE title='Machine Learning w praktyce')),
+((SELECT id FROM users WHERE email='jan.nowak@example.com'), (SELECT id FROM courses WHERE title='Frontend z React'));
+
+
+INSERT INTO discounts (code, percentage, amount_cents, active, expires_at, max_redemptions)
+VALUES
+('WELCOME10', 10, NULL, TRUE, '2025-12-31', 100),
+('BLACKFRIDAY', NULL, 2000, TRUE, '2025-11-30', 500),
+('STUDENT50', 50, NULL, TRUE, '2026-01-31', 50);
+
+
+INSERT INTO reviews (user_id, course_id, rating, comment)
+VALUES
+((SELECT id FROM users WHERE email='krystian.kruzelit@example.com'), (SELECT id FROM courses WHERE title='Kurs Cisco'), 1, 'ALE JAKOŚĆ'),
+((SELECT id FROM users WHERE email='jan.jaruzelski@example.com'), (SELECT id FROM courses WHERE title='Zaawansowany SQL'), 4, 'Dużo praktycznych przykładów, ale trudny.'),
+((SELECT id FROM users WHERE email='maria.debe@example.com'), (SELECT id FROM courses WHERE title='Frontend z React'), 5, 'Bardzo dobrze wytłumaczone komponenty.');
