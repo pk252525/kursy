@@ -1,13 +1,54 @@
-#header {
-  width: 100%;
-  height: 80px;
-  background-color: rgb(244, 252, 252);
-
-  display: flex;              /* włącz flexbox */
-  justify-content: center;    /* wyśrodkuj poziomo */
-  align-items: center;        /* wyśrodkuj pionowo */
+/* Ogólny layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
 }
 
-#header h1 {
-  margin: 0; /* usuwa domyślną przerwę */
+/* Nawigacja */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #004080;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Główna treść */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Stopka */
+.footer {
+  background-color: #004080;
+  color: white;
+  text-align: center;
+  padding: 1rem;
 }

@@ -1,23 +1,14 @@
+// server.js
 const express = require('express');
-const cors = require('cors');
+const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboard');
 
- const app = express();
-const PORT = 5000;
-
-// Middleware
-app.use(cors());
+const app = express();
 app.use(express.json());
 
-// Prosta trasa testowa
-app.get('/', (req, res) => {
-  res.send('Serwer Express działa!');
-});
+// Trasy
+app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
-// Przykładowa trasa API
-app.get('/hello', (req, res) => {
-  res.json({ message: 'Witaj z backendu!' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Serwer działa na http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server działa na http://localhost:${PORT}`));
