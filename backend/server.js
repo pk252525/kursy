@@ -219,6 +219,69 @@ app.delete('/api/cart/:courseId', authMiddleware, async (req, res) => {
 });
 
 // ============ PAYMENT ROUTES ============
+// Bezpośrednie przypisanie kursów do użytkownika (bez Stripe)
+app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
+  console.log('=== CHECKOUT DIRECT ===');
+  console.log('User ID:', req.user.userId);
+  
+  const client = await pool.connect();
+  
+  try {
+    await client.query('BEGIN');
+    
+    // Pobierz kursy z koszyka
+    const cartItems = await client.query(
+      `SELECT c.* FROM courses c 
+       INNER JOIN cart_items ci ON c.id = ci.course_id 
+       WHERE ci.user_id = $1`,
+      [req.user.userId]
+    );
+    
+    console.log('Znaleziono kursów w koszyku:', cartItems.rows.length);
+    
+    if (cartItems.rows.length === 0) {
+      await client.query('ROLLBACK');
+      console.log('Koszyk jest pusty!');
+      return res.status(400).json({ error: 'Cart is empty' });
+    }
+    
+    // Zapisz użytkownika na każdy kurs
+    for (const course of cartItems.rows) {
+      console.log(`Przypisywanie kursu: ${course.title} (${course.id})`);
+      
+      // Dodaj enrollment
+      const enrollResult = await client.query(
+        'INSERT INTO enrollments (user_id, course_id) VALUES ($1, $2) ON CONFLICT (user_id, course_id) DO NOTHING RETURNING *',
+        [req.user.userId, course.id]
+      );
+      console.log('Enrollment dodany:', enrollResult.rows.length > 0 ? 'TAK' : 'Już istniał');
+      
+      // Zapisz transakcję jako "succeeded"
+      await client.query(
+        `INSERT INTO transactions (user_id, course_id, amount_cents, status)
+         VALUES ($1, $2, $3, 'succeeded')`,
+        [req.user.userId, course.id, course.price_cents]
+      );
+      console.log('Transakcja zapisana');
+    }
+    
+    // Wyczyść koszyk
+    await client.query('DELETE FROM cart_items WHERE user_id = $1', [req.user.userId]);
+    console.log('Koszyk wyczyszczony');
+    
+    await client.query('COMMIT');
+    console.log('=== SUKCES - Przypisano', cartItems.rows.length, 'kursów ===');
+    res.json({ message: 'Kursy zostały przypisane do Twojego konta', enrolledCourses: cartItems.rows.length });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('BŁĄD podczas checkout:', err);
+    res.status(500).json({ error: err.message });
+  } finally {
+    client.release();
+  }
+});
+
+// Stripe checkout (opcjonalny, zachowany dla kompatybilności)
 app.post('/api/checkout', authMiddleware, async (req, res) => {
   try {
     const cartItems = await pool.query(

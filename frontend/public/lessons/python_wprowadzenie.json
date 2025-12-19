@@ -1,0 +1,295 @@
+{
+  "id": "python-intro-1",
+  "title": "Wprowadzenie do Pythona",
+  "course": "Python dla początkujących",
+  "duration": "45 minut",
+  "difficulty": "Beginner",
+  "sections": [
+    {
+      "type": "introduction",
+      "title": "Czym jest Python?",
+      "content": "Python to wysokopoziomowy, interpretowany język programowania, który został stworzony przez Guido van Rossuma i po raz pierwszy wydany w 1991 roku. Jest to jeden z najpopularniejszych języków programowania na świecie, ceniony za swoją prostotę i czytelność.",
+      "highlights": [
+        "Prosty i czytelny syntax",
+        "Wieloplatformowy (Windows, Linux, macOS)",
+        "Bogata biblioteka standardowa",
+        "Idealny dla początkujących",
+        "Używany w AI, Data Science, Web Development"
+      ]
+    },
+    {
+      "type": "theory",
+      "title": "Dlaczego Python?",
+      "content": "Python jest popularny z wielu powodów:",
+      "points": [
+        {
+          "heading": "Łatwość nauki",
+          "description": "Składnia Pythona przypomina zwykły angielski, co czyni go idealnym pierwszym językiem programowania."
+        },
+        {
+          "heading": "Wszechstronność",
+          "description": "Możesz używać Pythona do tworzenia aplikacji webowych, analizy danych, sztucznej inteligencji, automatyzacji i wiele więcej."
+        },
+        {
+          "heading": "Duża społeczność",
+          "description": "Miliony programistów na całym świecie używają Pythona, co oznacza łatwy dostęp do pomocy i zasobów."
+        },
+        {
+          "heading": "Biblioteki i frameworki",
+          "description": "Python ma ogromną liczbę gotowych bibliotek, które przyspieszają proces tworzenia aplikacji."
+        }
+      ]
+    },
+    {
+      "type": "installation",
+      "title": "Instalacja Pythona",
+      "content": "Aby rozpocząć programowanie w Pythonie, musisz go najpierw zainstalować:",
+      "steps": [
+        {
+          "step": 1,
+          "instruction": "Wejdź na oficjalną stronę Python: https://www.python.org/downloads/",
+          "note": "Strona automatycznie wykryje Twój system operacyjny"
+        },
+        {
+          "step": 2,
+          "instruction": "Pobierz najnowszą wersję Pythona (zalecana wersja 3.11 lub nowsza)",
+          "note": "Python 2.x jest już nieaktualny, używaj Python 3.x"
+        },
+        {
+          "step": 3,
+          "instruction": "Uruchom instalator i zaznacz opcję 'Add Python to PATH'",
+          "note": "To jest bardzo ważne - umożliwia uruchamianie Pythona z linii komend"
+        },
+        {
+          "step": 4,
+          "instruction": "Kliknij 'Install Now' i poczekaj na zakończenie instalacji"
+        }
+      ]
+    },
+    {
+      "type": "verification",
+      "title": "Weryfikacja instalacji",
+      "content": "Po instalacji sprawdź, czy Python został poprawnie zainstalowany:",
+      "commands": [
+        {
+          "description": "Otwórz terminal/wiersz poleceń (cmd, PowerShell lub Terminal)",
+          "command": "python --version",
+          "expected_output": "Python 3.11.x (lub nowsza wersja)",
+          "note": "Jeśli to nie działa, spróbuj: python3 --version"
+        },
+        {
+          "description": "Sprawdź instalację pip (menedżer pakietów Pythona)",
+          "command": "pip --version",
+          "expected_output": "pip 23.x.x from ...",
+          "note": "Pip jest instalowany automatycznie z Pythonem"
+        }
+      ]
+    },
+    {
+      "type": "practice",
+      "title": "Pierwszy program - Hello World!",
+      "content": "Napiszmy Twój pierwszy program w Pythonie!",
+      "code_examples": [
+        {
+          "title": "Metoda 1: Interaktywna konsola Pythona",
+          "steps": [
+            "Otwórz terminal/wiersz poleceń",
+            "Wpisz 'python' lub 'python3' i naciśnij Enter",
+            "Zobaczysz >>> (to jest prompt Pythona)",
+            "Wpisz kod poniżej:"
+          ],
+          "code": "print('Hello, World!')",
+          "language": "python",
+          "output": "Hello, World!",
+          "explanation": "Funkcja print() wyświetla tekst na ekranie. Tekst musi być w cudzysłowie."
+        },
+        {
+          "title": "Metoda 2: Plik Python (.py)",
+          "steps": [
+            "Otwórz edytor tekstu (np. VS Code, Notepad++, lub zwykły Notatnik)",
+            "Wpisz poniższy kod",
+            "Zapisz plik jako 'hello.py'",
+            "W terminalu wpisz: python hello.py"
+          ],
+          "code": "# To jest komentarz - Python go ignoruje\nprint('Hello, World!')\nprint('Witaj w świecie Pythona!')\nprint('To jest mój pierwszy program!')",
+          "language": "python",
+          "output": "Hello, World!\nWitaj w świecie Pythona!\nTo jest mój pierwszy program!",
+          "explanation": "Każda linia z print() wyświetla tekst w nowej linii. Linie zaczynające się od # to komentarze."
+        }
+      ]
+    },
+    {
+      "type": "interactive_exercise",
+      "title": "Ćwiczenie praktyczne",
+      "exercises": [
+        {
+          "number": 1,
+          "task": "Napisz program, który wyświetli Twoje imię",
+          "hint": "Użyj funkcji print() z Twoim imieniem w cudzysłowie",
+          "solution": "print('Jan')",
+          "points": 10
+        },
+        {
+          "number": 2,
+          "task": "Napisz program, który wyświetli trzy linie tekstu: Twoje imię, Twoje miasto i Twój wiek",
+          "hint": "Użyj trzech osobnych wywołań print()",
+          "solution": "print('Jan')\nprint('Warszawa')\nprint('25')",
+          "points": 15
+        },
+        {
+          "number": 3,
+          "task": "Dodaj komentarz do swojego programu wyjaśniający, co robi",
+          "hint": "Komentarze zaczynają się od znaku #",
+          "solution": "# Program wyświetlający informacje o mnie\nprint('Jan')\nprint('Warszawa')",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "type": "tools",
+      "title": "Narzędzia dla programistów Python",
+      "recommendations": [
+        {
+          "name": "Visual Studio Code",
+          "type": "Edytor kodu",
+          "description": "Darmowy, potężny edytor z rozszerzeniem Python",
+          "url": "https://code.visualstudio.com/",
+          "extensions": ["Python", "Pylance", "Python Indent"]
+        },
+        {
+          "name": "PyCharm Community",
+          "type": "IDE",
+          "description": "Profesjonalne środowisko programistyczne dedykowane dla Pythona",
+          "url": "https://www.jetbrains.com/pycharm/",
+          "note": "Wersja Community jest darmowa"
+        },
+        {
+          "name": "Jupyter Notebook",
+          "type": "Interaktywne środowisko",
+          "description": "Świetne do nauki i eksperymentowania z kodem",
+          "install": "pip install jupyter",
+          "note": "Popularne w Data Science"
+        },
+        {
+          "name": "Python IDLE",
+          "type": "Podstawowe IDE",
+          "description": "Proste IDE instalowane domyślnie z Pythonem",
+          "note": "Dobre na początek"
+        }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Podsumowanie",
+      "key_points": [
+        "Python to prosty i wszechstronny język programowania",
+        "Funkcja print() wyświetla tekst na ekranie",
+        "Komentarze zaczynają się od znaku # i są ignorowane przez Python",
+        "Możesz uruchamiać kod w konsoli interaktywnej lub z pliku .py",
+        "Python jest używany w wielu dziedzinach: web, data science, AI, automatyzacja"
+      ]
+    },
+    {
+      "type": "next_steps",
+      "title": "Co dalej?",
+      "content": "W kolejnej lekcji nauczysz się:",
+      "topics": [
+        "Czym są zmienne i jak ich używać",
+        "Podstawowe typy danych w Pythonie",
+        "Operacje na liczbach i tekstach",
+        "Pobieranie danych od użytkownika"
+      ]
+    },
+    {
+      "type": "resources",
+      "title": "Dodatkowe materiały",
+      "links": [
+        {
+          "title": "Oficjalna dokumentacja Python",
+          "url": "https://docs.python.org/3/",
+          "description": "Kompletna dokumentacja języka Python"
+        },
+        {
+          "title": "Python.org - Tutorial",
+          "url": "https://docs.python.org/3/tutorial/",
+          "description": "Oficjalny tutorial dla początkujących"
+        },
+        {
+          "title": "Real Python",
+          "url": "https://realpython.com/",
+          "description": "Wysokiej jakości tutoriale i artykuły"
+        },
+        {
+          "title": "Python for Beginners",
+          "url": "https://www.python.org/about/gettingstarted/",
+          "description": "Przewodnik dla osób zaczynających przygodę z Pythonem"
+        }
+      ]
+    }
+  ],
+  "quiz": {
+    "title": "Test wiedzy",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Kto stworzył język Python?",
+        "options": [
+          "Bill Gates",
+          "Guido van Rossum",
+          "Linus Torvalds",
+          "Dennis Ritchie"
+        ],
+        "correct_answer": 1,
+        "explanation": "Python został stworzony przez Guido van Rossuma i wydany w 1991 roku."
+      },
+      {
+        "id": 2,
+        "question": "Która funkcja służy do wyświetlania tekstu w Pythonie?",
+        "options": [
+          "display()",
+          "show()",
+          "print()",
+          "echo()"
+        ],
+        "correct_answer": 2,
+        "explanation": "Funkcja print() jest używana do wyświetlania tekstu i innych wartości."
+      },
+      {
+        "id": 3,
+        "question": "Jak oznaczyć komentarz w Pythonie?",
+        "options": [
+          "// komentarz",
+          "<!-- komentarz -->",
+          "# komentarz",
+          "/* komentarz */"
+        ],
+        "correct_answer": 2,
+        "explanation": "W Pythonie komentarze jednoliniowe zaczynają się od znaku #."
+      },
+      {
+        "id": 4,
+        "question": "Jakie rozszerzenie mają pliki z kodem Python?",
+        "options": [
+          ".python",
+          ".pt",
+          ".py",
+          ".pyt"
+        ],
+        "correct_answer": 2,
+        "explanation": "Pliki z kodem Python mają rozszerzenie .py"
+      },
+      {
+        "id": 5,
+        "question": "Która wersja Pythona jest obecnie zalecana?",
+        "options": [
+          "Python 2.7",
+          "Python 1.6",
+          "Python 3.x",
+          "Python 4.0"
+        ],
+        "correct_answer": 2,
+        "explanation": "Python 3.x jest aktualną i zalecaną wersją. Python 2.x nie jest już wspierany."
+      }
+    ]
+  }
+}

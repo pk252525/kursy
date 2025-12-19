@@ -311,10 +311,22 @@ function Cart() {
 
   const handleCheckout = async () => {
     try {
-      const { data } = await axios.post(`${API}/checkout`, {}, { headers: { Authorization: `Bearer ${token}` } });
-      window.location.href = `https://checkout.stripe.com/pay/${data.sessionId}`;
+      console.log('Wysyłanie żądania do:', `${API}/checkout/direct`);
+      console.log('Token:', token ? 'Obecny' : 'Brak');
+      console.log('Koszyk zawiera:', cartItems.length, 'kursów');
+      
+      const response = await axios.post(`${API}/checkout/direct`, { discountCode }, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      });
+      
+      console.log('Odpowiedź serwera:', response.data);
+      alert('Kursy zostały przypisane do Twojego konta!');
+      navigate('/dashboard');
     } catch (err) {
-      alert('Error processing checkout');
+      console.error('Szczegóły błędu:', err);
+      console.error('Odpowiedź błędu:', err.response?.data);
+      const errorMsg = err.response?.data?.error || err.message || 'Nieznany błąd';
+      alert('Błąd podczas przypisywania kursów: ' + errorMsg);
     }
   };
 
@@ -349,7 +361,7 @@ function Cart() {
           <div className="cart-summary">
             <p>Subtotal: ${total.toFixed(2)}</p>
             {discount && <p>Final Total: ${finalTotal.toFixed(2)}</p>}
-            <button onClick={handleCheckout} className="btn btn-primary btn-large">Checkout with Stripe</button>
+            <button onClick={handleCheckout} className="btn btn-primary btn-large">Zapisz się na kursy</button>
           </div>
         </>
       )}
@@ -527,17 +539,20 @@ function AppContent() {
   return (
     <div className="app-container">
       <nav className="navbar">
-        <Link to="/" className="logo">Training Platform</Link>
+        <Link to="/" className="logo">Kursy Velo</Link>
         <ul className="nav-links">
           <li><Link to="/">Home</Link></li>
           {token ? (
             <>
               <li><Link to="/cart">Cart</Link></li>
               <li><Link to="/dashboard">Dashboard</Link></li>
+              <li><Link to="/admin">Admin</Link></li>
               <li><button onClick={handleLogout} className="btn btn-logout">Logout</button></li>
             </>
           ) : (
-            <li><Link to="/login">Login</Link></li>
+            <>
+              <li><Link to="/login">Login</Link></li>
+            </>
           )}
         </ul>
       </nav>
