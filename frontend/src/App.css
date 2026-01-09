@@ -747,6 +747,41 @@ body::before {
   background: rgba(45, 53, 97, 1);
 }
 
+.auth-form .checkbox-group {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(26, 31, 58, 0.5);
+  border-radius: 8px;
+  border: 2px solid rgba(0, 240, 255, 0.2);
+}
+
+.auth-form .checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-form .checkbox-group label:hover {
+  color: var(--neon-cyan);
+}
+
+.auth-form .checkbox-group input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: var(--neon-cyan);
+  border: 2px solid var(--neon-cyan);
+}
+
+.auth-form .checkbox-group span {
+  font-weight: 600;
+  text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+}
+
 .auth-form p {
   text-align: center;
   margin-top: 1.5rem;
@@ -1230,3 +1265,269 @@ h1, h2 {
     font-size: 1.8rem;
   }
 }
+
+/* ========== COURSE LESSONS ========== */
+.course-lessons {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.course-lessons-header {
+  margin-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-block;
+  color: var(--neon-cyan);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  color: var(--neon-pink);
+  transform: translateX(-5px);
+}
+
+.course-lessons-header h1 {
+  color: var(--neon-cyan);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.course-meta {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+}
+
+.lessons-list h2 {
+  color: var(--neon-purple);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 15px var(--neon-purple);
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.lesson-card {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.9), rgba(45, 53, 97, 0.8));
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.lesson-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 8px 30px rgba(0, 240, 255, 0.4);
+}
+
+.lesson-number {
+  min-width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--cyber-darker);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+.lesson-info h3 {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-duration {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ========== LESSON VIEW ========== */
+.lesson-view {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.lesson-header {
+  margin-bottom: 2rem;
+}
+
+.lesson-title-section {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.9), rgba(45, 53, 97, 0.8));
+  border: 2px solid rgba(181, 55, 242, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.lesson-meta {
+  color: var(--neon-purple);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-title-section h1 {
+  color: var(--neon-cyan);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.lesson-content {
+  background: rgba(26, 31, 58, 0.7);
+  border: 2px solid rgba(0, 240, 255, 0.2);
+  border-radius: 16px;
+  padding: 3rem;
+  margin: 2rem 0;
+  line-height: 1.8;
+}
+
+.markdown-content {
+  color: var(--text-light);
+}
+
+.markdown-content h1 {
+  color: var(--neon-cyan);
+  font-size: 2rem;
+  margin: 2rem 0 1rem;
+  text-shadow: 0 0 15px var(--neon-cyan);
+}
+
+.markdown-content h2 {
+  color: var(--neon-purple);
+  font-size: 1.6rem;
+  margin: 1.5rem 0 1rem;
+  text-shadow: 0 0 10px var(--neon-purple);
+}
+
+.markdown-content h3 {
+  color: var(--neon-pink);
+  font-size: 1.3rem;
+  margin: 1.2rem 0 0.8rem;
+}
+
+.markdown-content p {
+  margin: 1rem 0;
+  color: var(--text-light);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.markdown-content li {
+  margin: 0.5rem 0;
+  color: var(--text-light);
+}
+
+.markdown-content code {
+  background: rgba(10, 14, 39, 0.8);
+  color: var(--neon-yellow);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.markdown-content pre {
+  background: rgba(10, 14, 39, 0.9);
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.markdown-content pre code {
+  background: none;
+  padding: 0;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--neon-purple);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  background: rgba(181, 55, 242, 0.1);
+  border-radius: 8px;
+  color: var(--text-light);
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.markdown-content table th {
+  background: rgba(0, 240, 255, 0.2);
+  color: var(--neon-cyan);
+  font-weight: bold;
+}
+
+.markdown-content a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.markdown-content a:hover {
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.markdown-content strong {
+  color: var(--neon-yellow);
+  font-weight: bold;
+}
+
+.lesson-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.lesson-navigation button {
+  flex: 1;
+  padding: 1rem 2rem;
+}
+
+.lesson-navigation button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+

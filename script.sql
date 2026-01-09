@@ -35,6 +35,7 @@ CREATE TABLE lessons (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     course_id UUID REFERENCES courses(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
+    content JSONB,
     content_url TEXT,
     lesson_order INT,
     created_at TIMESTAMP DEFAULT NOW()
@@ -93,3 +94,6 @@ CREATE TABLE reviews (
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(user_id, course_id)
 );
+
+-- Dodanie kolumny content do istniejącej tabeli lessons
+ALTER TABLE lessons ADD COLUMN IF NOT EXISTS content JSONB;

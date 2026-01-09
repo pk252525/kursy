@@ -53,12 +53,12 @@ function Home() {
   };
 
   const addToCart = async (courseId) => {
-    if (!token) return alert('Please login first');
+    if (!token) return alert('Najpierw zaloguj się');
     try {
       await axios.post(`${API}/cart`, { courseId }, { headers: { Authorization: `Bearer ${token}` } });
-      alert('Added to cart!');
+      alert('Dodano do koszyka!');
     } catch (err) {
-      alert('Error adding to cart');
+      alert('Błąd podczas dodawania do koszyka');
     }
   };
 
@@ -69,21 +69,21 @@ function Home() {
     <div className="home">
       <div className="filters">
         <select value={filters.category} onChange={e => setFilters({ ...filters, category: e.target.value })}>
-          <option value="">All Categories</option>
+          <option value="">Wszystkie kategorie</option>
           <option value="Web Development">Web Development</option>
           <option value="Data Science">Data Science</option>
           <option value="Mobile">Mobile</option>
         </select>
         <select value={filters.difficulty} onChange={e => setFilters({ ...filters, difficulty: e.target.value })}>
-          <option value="">All Levels</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
+          <option value="">Wszystkie poziomy</option>
+          <option value="Beginner">Początkujący</option>
+          <option value="Intermediate">Średniozaawansowany</option>
+          <option value="Advanced">Zaawansowany</option>
         </select>
         <select value={filters.sort} onChange={e => setFilters({ ...filters, sort: e.target.value })}>
-          <option value="">Newest</option>
-          <option value="price">Price (Low to High)</option>
-          <option value="rating">Top Rated</option>
+          <option value="">Najnowsze</option>
+          <option value="price">Cena (od najniższej)</option>
+          <option value="rating">Najwyżej ocenione</option>
         </select>
       </div>
 
@@ -96,8 +96,8 @@ function Home() {
             <p className="instructor">by {course.instructor}</p>
             <p className="price">${course.price}</p>
             <div className="actions">
-              <Link to={`/course/${course.id}`} className="btn btn-primary">View Details</Link>
-              <button onClick={() => addToCart(course.id)} className="btn btn-secondary">Add to Cart</button>
+              <Link to={`/course/${course.id}`} className="btn btn-primary">Zobacz szczegóły</Link>
+              <button onClick={() => addToCart(course.id)} className="btn btn-secondary">Dodaj do koszyka</button>
             </div>
           </div>
         ))}
@@ -153,37 +153,37 @@ function CourseDetail() {
   };
 
   const addToCart = async () => {
-    if (!token) return alert('Please login first');
+    if (!token) return alert('Najpierw zaloguj się');
     try {
       await axios.post(`${API}/cart`, { courseId: id }, { headers: { Authorization: `Bearer ${token}` } });
-      alert('Added to cart!');
+      alert('Dodano do koszyka!');
     } catch (err) {
-      alert('Error adding to cart');
+      alert('Błąd podczas dodawania do koszyka');
     }
   };
 
   const submitReview = async (e) => {
     e.preventDefault();
-    if (!token) return alert('Please login first');
-    if (!isEnrolled) return alert('You must purchase this course to leave a review');
+    if (!token) return alert('Najpierw zaloguj się');
+    if (!isEnrolled) return alert('Musisz kupić ten kurs, aby dodać recenzję');
     
     setSubmittingReview(true);
     try {
       await axios.post(`${API}/courses/${id}/reviews`, reviewForm, { 
         headers: { Authorization: `Bearer ${token}` } 
       });
-      alert('Review submitted successfully!');
+      alert('Recenzja została dodana!');
       setReviewForm({ rating: 5, comment: '' });
       fetchCourse(); // Reload course to show new review
     } catch (err) {
-      alert(err.response?.data?.error || 'Error submitting review');
+      alert(err.response?.data?.error || 'Błąd podczas dodawania recenzji');
     } finally {
       setSubmittingReview(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!course) return <div>Course not found</div>;
+  if (loading) return <div>Ładowanie...</div>;
+  if (!course) return <div>Nie znaleziono kursu</div>;
 
   return (
     <div className="course-detail">
@@ -193,35 +193,35 @@ function CourseDetail() {
       </div>
       <div className="course-body">
         <div className="course-main">
-          <h3>Description</h3>
+          <h3>Opis</h3>
           <p>{course.description}</p>
-          <h3>Lessons ({course.lessons?.length || 0})</h3>
+          <h3>Lekcje ({course.lessons?.length || 0})</h3>
           <ul>
             {course.lessons?.map((lesson, i) => (
               <li key={lesson.id}>{i + 1}. {lesson.title}</li>
             ))}
           </ul>
-          <h3>Reviews ({course.reviews?.length || 0})</h3>
+          <h3>Recenzje ({course.reviews?.length || 0})</h3>
           {token && isEnrolled && (
             <div className="review-form">
-              <h4>Write a Review</h4>
+              <h4>Napisz recenzję</h4>
               <form onSubmit={submitReview}>
                 <div>
-                  <label>Rating: </label>
+                  <label>Ocena: </label>
                   <select 
                     value={reviewForm.rating} 
                     onChange={e => setReviewForm({ ...reviewForm, rating: parseInt(e.target.value) })}
                   >
-                    <option value="5">5 - Excellent</option>
-                    <option value="4">4 - Very Good</option>
-                    <option value="3">3 - Good</option>
-                    <option value="2">2 - Fair</option>
-                    <option value="1">1 - Poor</option>
+                    <option value="5">5 - Doskonały</option>
+                    <option value="4">4 - Bardzo dobry</option>
+                    <option value="3">3 - Dobry</option>
+                    <option value="2">2 - Średni</option>
+                    <option value="1">1 - Słaby</option>
                   </select>
                 </div>
                 <div>
                   <textarea 
-                    placeholder="Share your experience with this course..." 
+                    placeholder="Podziel się swoją opinią o kursie..." 
                     value={reviewForm.comment}
                     onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })}
                     required
@@ -229,7 +229,7 @@ function CourseDetail() {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={submittingReview}>
-                  {submittingReview ? 'Submitting...' : 'Submit Review'}
+                  {submittingReview ? 'Wysyłanie...' : 'Wyślij recenzję'}
                 </button>
               </form>
             </div>
@@ -246,14 +246,14 @@ function CourseDetail() {
           )}
           {course.reviews?.map(review => (
             <div key={review.id} className="review">
-              <p><strong>Rating: {review.rating}/5</strong></p>
+              <p><strong>Ocena: {review.rating}/5</strong></p>
               <p>{review.comment}</p>
             </div>
           ))}
         </div>
         <div className="course-sidebar">
           <p className="price">${course.price}</p>
-          <button onClick={addToCart} className="btn btn-primary btn-large">Add to Cart</button>
+          <button onClick={addToCart} className="btn btn-primary btn-large">Dodaj do koszyka</button>
         </div>
       </div>
     </div>
@@ -264,6 +264,7 @@ function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [grypsuje, setGrypsuje] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setUser, setToken } = useAuth();
   const navigate = useNavigate();
@@ -287,16 +288,30 @@ function Login() {
   return (
     <div className="auth-page">
       <div className="auth-form">
-        <h2>{isLogin ? 'Login' : 'Register'}</h2>
+        <h2>{isLogin ? 'Logowanie' : 'Rejestracja'}</h2>
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-          <button type="submit" className="btn btn-primary" disabled={loading}>{isLogin ? 'Login' : 'Register'}</button>
+          <input type="password" placeholder="Hasło" value={password} onChange={e => setPassword(e.target.value)} required />
+          {!isLogin && (
+            <div className="checkbox-group">
+              <label>
+                <input 
+                  type="checkbox" 
+                  checked={grypsuje} 
+                  onChange={e => setGrypsuje(e.target.checked)} 
+                />
+                <span>Grypsuje</span>
+              </label>
+            </div>
+          )}
+          <button type="submit" className="btn btn-primary" disabled={loading || (!isLogin && !grypsuje)}>
+            {isLogin ? 'Zaloguj się' : 'Zarejestruj się'}
+          </button>
         </form>
         <p>
-          {isLogin ? "Don't have an account? " : 'Already have an account? '}
-          <button onClick={() => setIsLogin(!isLogin)} className="link-btn">
-            {isLogin ? 'Register' : 'Login'}
+          {isLogin ? 'Nie masz konta? ' : 'Masz już konto? '}
+          <button onClick={() => { setIsLogin(!isLogin); setGrypsuje(false); }} className="link-btn">
+            {isLogin ? 'Zarejestruj się' : 'Zaloguj się'}
           </button>
         </p>
       </div>
@@ -324,26 +339,241 @@ function Dashboard() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Ładowanie...</div>;
 
   return (
     <div className="dashboard">
-      <h2>My Courses</h2>
+      <h2>Moje kursy</h2>
       {enrollments.length === 0 ? (
-        <p>No courses yet. <Link to="/">Browse courses</Link></p>
+        <p>Nie masz jeszcze żadnych kursów. <Link to="/">Przeglądaj kursy</Link></p>
       ) : (
         <div className="courses-grid">
           {enrollments.map(course => (
             <div key={course.id} className="course-card">
               <h3>{course.title}</h3>
               <p>{course.description}</p>
-              <Link to={`/course/${course.id}`} className="btn btn-primary">Access Course</Link>
+              <Link to={`/learn/${course.id}`} className="btn btn-primary">Przejdź do kursu</Link>
             </div>
           ))}
         </div>
       )}
     </div>
   );
+}
+
+function CourseLessons() {
+  const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCourse();
+  }, [id]);
+
+  const fetchCourse = async () => {
+    try {
+      const { data } = await axios.get(`${API}/courses/${id}`);
+      setCourse(data);
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Błąd podczas ładowania kursu');
+      navigate('/dashboard');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div>Ładowanie...</div>;
+  if (!course) return <div>Nie znaleziono kursu</div>;
+
+  return (
+    <div className="course-lessons">
+      <div className="course-lessons-header">
+        <Link to="/dashboard" className="back-link">← Powrót do moich kursów</Link>
+        <h1>{course.title}</h1>
+        <p className="course-meta">{course.category} • {course.difficulty}</p>
+      </div>
+      
+      <div className="lessons-list">
+        <h2>Lekcje kursu</h2>
+        {!course.lessons || course.lessons.length === 0 ? (
+          <p>Ten kurs nie ma jeszcze żadnych lekcji.</p>
+        ) : (
+          <div className="lessons-grid">
+            {course.lessons.map((lesson, index) => (
+              <Link 
+                key={lesson.id} 
+                to={`/learn/${id}/lesson/${lesson.id}`}
+                className="lesson-card"
+              >
+                <div className="lesson-number">{index + 1}</div>
+                <div className="lesson-info">
+                  <h3>{lesson.title}</h3>
+                  {lesson.content?.duration && (
+                    <p className="lesson-duration">⏱ {lesson.content.duration}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function LessonView() {
+  const { id, lessonId } = useParams();
+  const [course, setCourse] = useState(null);
+  const [lesson, setLesson] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCourseAndLesson();
+  }, [id, lessonId]);
+
+  const fetchCourseAndLesson = async () => {
+    try {
+      const { data } = await axios.get(`${API}/courses/${id}`);
+      setCourse(data);
+      
+      const foundLesson = data.lessons?.find(l => String(l.id) === String(lessonId));
+      if (foundLesson) {
+        setLesson(foundLesson);
+      } else {
+        alert('Nie znaleziono lekcji');
+        navigate(`/learn/${id}`);
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Błąd podczas ładowania lekcji');
+      navigate('/dashboard');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getCurrentLessonIndex = () => {
+    return course?.lessons?.findIndex(l => String(l.id) === String(lessonId)) || 0;
+  };
+
+  const goToNextLesson = () => {
+    const currentIndex = getCurrentLessonIndex();
+    if (currentIndex < course.lessons.length - 1) {
+      const nextLesson = course.lessons[currentIndex + 1];
+      navigate(`/learn/${id}/lesson/${nextLesson.id}`);
+    }
+  };
+
+  const goToPreviousLesson = () => {
+    const currentIndex = getCurrentLessonIndex();
+    if (currentIndex > 0) {
+      const prevLesson = course.lessons[currentIndex - 1];
+      navigate(`/learn/${id}/lesson/${prevLesson.id}`);
+    }
+  };
+
+  if (loading) return <div>Ładowanie...</div>;
+  if (!lesson) return <div>Nie znaleziono lekcji</div>;
+
+  const currentIndex = getCurrentLessonIndex();
+  const hasNext = currentIndex < course.lessons.length - 1;
+  const hasPrev = currentIndex > 0;
+
+  return (
+    <div className="lesson-view">
+      <div className="lesson-header">
+        <Link to={`/learn/${id}`} className="back-link">← Powrót do listy lekcji</Link>
+        <div className="lesson-title-section">
+          <p className="lesson-meta">Lekcja {currentIndex + 1} z {course.lessons.length}</p>
+          <h1>{lesson.title}</h1>
+          {lesson.content?.duration && (
+            <p className="lesson-duration">⏱ Czas trwania: {lesson.content.duration}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="lesson-content">
+        {lesson.content?.markdown ? (
+          <div className="markdown-content" dangerouslySetInnerHTML={{ __html: renderMarkdown(lesson.content.markdown) }} />
+        ) : (
+          <p>Brak treści lekcji</p>
+        )}
+      </div>
+
+      <div className="lesson-navigation">
+        <button 
+          onClick={goToPreviousLesson} 
+          disabled={!hasPrev}
+          className="btn btn-secondary"
+        >
+          ← Poprzednia lekcja
+        </button>
+        <button 
+          onClick={goToNextLesson} 
+          disabled={!hasNext}
+          className="btn btn-primary"
+        >
+          Następna lekcja →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Prosta funkcja do renderowania Markdown (podstawowa wersja)
+function renderMarkdown(markdown) {
+  if (!markdown) return '';
+  
+  let html = markdown
+    // Code blocks
+    .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+      return `<pre><code class="language-${lang || 'plaintext'}">${escapeHtml(code.trim())}</code></pre>`;
+    })
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    // Bold
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Inline code
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    // Unordered lists
+    .replace(/^\- (.*$)/gim, '<li>$1</li>')
+    // Blockquotes
+    .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+    // Line breaks
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  // Wrap lists
+  html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+  
+  // Wrap in paragraphs if not already wrapped
+  if (!html.startsWith('<')) {
+    html = '<p>' + html + '</p>';
+  }
+
+  return html;
+}
+
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 function Cart() {
@@ -374,7 +604,7 @@ function Cart() {
       await axios.delete(`${API}/cart/${courseId}`, { headers: { Authorization: `Bearer ${token}` } });
       setCartItems(cartItems.filter(c => c.id !== courseId));
     } catch (err) {
-      alert('Error removing from cart');
+      alert('Błąd podczas usuwania z koszyka');
     }
   };
 
@@ -384,7 +614,7 @@ function Cart() {
       const { data } = await axios.post(`${API}/discounts/validate`, { code: discountCode, coursePrice: total });
       setDiscount(data);
     } catch (err) {
-      alert('Invalid discount code');
+      alert('Nieprawidłowy kod rabatowy');
     }
   };
 
@@ -412,13 +642,13 @@ function Cart() {
   const total = cartItems.reduce((sum, c) => sum + c.price, 0);
   const finalTotal = discount ? discount.finalPrice : total;
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Ładowanie...</div>;
 
   return (
     <div className="cart">
-      <h2>Shopping Cart</h2>
+      <h2>Koszyk</h2>
       {cartItems.length === 0 ? (
-        <p>Cart is empty. <Link to="/">Continue shopping</Link></p>
+        <p>Koszyk jest pusty. <Link to="/">Kontynuuj zakupy</Link></p>
       ) : (
         <>
           <div className="cart-items">
@@ -428,18 +658,18 @@ function Cart() {
                   <h4>{course.title}</h4>
                   <p>${course.price}</p>
                 </div>
-                <button onClick={() => removeFromCart(course.id)} className="btn btn-small">Remove</button>
+                <button onClick={() => removeFromCart(course.id)} className="btn btn-small">Usuń</button>
               </div>
             ))}
           </div>
           <div className="discount-section">
-            <input type="text" placeholder="Discount code" value={discountCode} onChange={e => setDiscountCode(e.target.value)} />
-            <button onClick={validateDiscount} className="btn btn-secondary">Apply</button>
-            {discount && <p>Discount applied! Save ${discount.discount}</p>}
+            <input type="text" placeholder="Kod rabatowy" value={discountCode} onChange={e => setDiscountCode(e.target.value)} />
+            <button onClick={validateDiscount} className="btn btn-secondary">Zastosuj</button>
+            {discount && <p>Kod rabatowy zastosowany! Oszczędzasz ${discount.discount}</p>}
           </div>
           <div className="cart-summary">
-            <p>Subtotal: ${total.toFixed(2)}</p>
-            {discount && <p>Final Total: ${finalTotal.toFixed(2)}</p>}
+            <p>Suma częściowa: ${total.toFixed(2)}</p>
+            {discount && <p>Suma końcowa: ${finalTotal.toFixed(2)}</p>}
             <button onClick={handleCheckout} className="btn btn-primary btn-large">Zapisz się na kursy</button>
           </div>
         </>
@@ -491,28 +721,28 @@ function AdminPanel() {
       setEditingId(null);
       fetchCourses();
     } catch (err) {
-      alert('Error saving course');
+      alert('Błąd podczas zapisywania kursu');
     }
   };
 
   const deleteCourse = async (id) => {
-    if (window.confirm('Delete this course?')) {
+    if (window.confirm('Usunąć ten kurs?')) {
       try {
         await axios.delete(`${API}/courses/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         fetchCourses();
       } catch (err) {
-        alert('Error deleting course');
+        alert('Błąd podczas usuwania kursu');
       }
     }
   };
 
   const deleteUser = async (id) => {
-    if (window.confirm('Delete this user?')) {
+    if (window.confirm('Usunąć tego użytkownika?')) {
       try {
         await axios.delete(`${API}/admin/users/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         fetchUsers();
       } catch (err) {
-        alert('Error deleting user');
+        alert('Błąd podczas usuwania użytkownika');
       }
     }
   };
@@ -520,37 +750,37 @@ function AdminPanel() {
   return (
     <div className="admin-panel">
       <div className="admin-tabs">
-        <button onClick={() => setTab('courses')} className={tab === 'courses' ? 'active' : ''}>Courses</button>
-        <button onClick={() => setTab('users')} className={tab === 'users' ? 'active' : ''}>Users</button>
+        <button onClick={() => setTab('courses')} className={tab === 'courses' ? 'active' : ''}>Kursy</button>
+        <button onClick={() => setTab('users')} className={tab === 'users' ? 'active' : ''}>Użytkownicy</button>
       </div>
 
       {tab === 'courses' && (
         <div>
           <form onSubmit={handleSubmit} className="admin-form">
-            <h3>{editingId ? 'Edit Course' : 'Create Course'}</h3>
-            <input type="text" placeholder="Title" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} required />
-            <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required></textarea>
-            <input type="number" placeholder="Price" step="0.01" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
-            <input type="text" placeholder="Category" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} />
+            <h3>{editingId ? 'Edytuj kurs' : 'Utwórz kurs'}</h3>
+            <input type="text" placeholder="Tytuł" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} required />
+            <textarea placeholder="Opis" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required></textarea>
+            <input type="number" placeholder="Cena" step="0.01" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
+            <input type="text" placeholder="Kategoria" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} />
             <select value={formData.difficulty} onChange={e => setFormData({ ...formData, difficulty: e.target.value })}>
-              <option value="">Select Difficulty</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
+              <option value="">Wybierz poziom</option>
+              <option value="Beginner">Początkujący</option>
+              <option value="Intermediate">Średniozaawansowany</option>
+              <option value="Advanced">Zaawansowany</option>
             </select>
-            <input type="text" placeholder="Instructor" value={formData.instructor} onChange={e => setFormData({ ...formData, instructor: e.target.value })} />
-            <button type="submit" className="btn btn-primary">{editingId ? 'Update' : 'Create'}</button>
-            {editingId && <button type="button" onClick={() => { setEditingId(null); setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' }); }} className="btn btn-secondary">Cancel</button>}
+            <input type="text" placeholder="Instruktor" value={formData.instructor} onChange={e => setFormData({ ...formData, instructor: e.target.value })} />
+            <button type="submit" className="btn btn-primary">{editingId ? 'Zaktualizuj' : 'Utwórz'}</button>
+            {editingId && <button type="button" onClick={() => { setEditingId(null); setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' }); }} className="btn btn-secondary">Anuluj</button>}
           </form>
 
           <table className="courses-table">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Difficulty</th>
-                <th>Actions</th>
+                <th>Tytuł</th>
+                <th>Cena</th>
+                <th>Kategoria</th>
+                <th>Poziom</th>
+                <th>Akcje</th>
               </tr>
             </thead>
             <tbody>
@@ -561,8 +791,8 @@ function AdminPanel() {
                   <td>{course.category}</td>
                   <td>{course.difficulty}</td>
                   <td>
-                    <button onClick={() => { setEditingId(course.id); setFormData(course); }} className="btn btn-small">Edit</button>
-                    <button onClick={() => deleteCourse(course.id)} className="btn btn-small btn-danger">Delete</button>
+                    <button onClick={() => { setEditingId(course.id); setFormData(course); }} className="btn btn-small">Edytuj</button>
+                    <button onClick={() => deleteCourse(course.id)} className="btn btn-small btn-danger">Usuń</button>
                   </td>
                 </tr>
               ))}
@@ -576,9 +806,9 @@ function AdminPanel() {
           <thead>
             <tr>
               <th>Email</th>
-              <th>Role</th>
-              <th>Created</th>
-              <th>Actions</th>
+              <th>Rola</th>
+              <th>Data utworzenia</th>
+              <th>Akcje</th>
             </tr>
           </thead>
           <tbody>
@@ -588,7 +818,7 @@ function AdminPanel() {
                 <td>{user.role}</td>
                 <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 <td>
-                  <button onClick={() => deleteUser(user.id)} className="btn btn-small btn-danger">Delete</button>
+                  <button onClick={() => deleteUser(user.id)} className="btn btn-small btn-danger">Usuń</button>
                 </td>
               </tr>
             ))}
@@ -608,7 +838,7 @@ function ProtectedRoute({ component, requiredRole }) {
 
 // ========== MAIN APP ==========
 function AppContent() {
-  const { token, setToken } = useAuth();
+  const { token, setToken, user } = useAuth();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -620,17 +850,17 @@ function AppContent() {
       <nav className="navbar">
         <Link to="/" className="logo">Kursy Velo</Link>
         <ul className="nav-links">
-          <li><Link to="/">Home</Link></li>
+          <li><Link to="/">Strona główna</Link></li>
           {token ? (
             <>
-              <li><Link to="/cart">Cart</Link></li>
-              <li><Link to="/dashboard">Dashboard</Link></li>
-              <li><Link to="/admin">Admin</Link></li>
-              <li><button onClick={handleLogout} className="btn btn-logout">Logout</button></li>
+              <li><Link to="/cart">Koszyk</Link></li>
+              <li><Link to="/dashboard">Moje kursy</Link></li>
+              {user?.role === 'ADMIN' && <li><Link to="/admin">Panel admina</Link></li>}
+              <li><button onClick={handleLogout} className="btn btn-logout">Wyloguj</button></li>
             </>
           ) : (
             <>
-              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/login">Zaloguj</Link></li>
             </>
           )}
         </ul>
@@ -643,6 +873,8 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<ProtectedRoute component={<Cart />} />} />
           <Route path="/dashboard" element={<ProtectedRoute component={<Dashboard />} />} />
+          <Route path="/learn/:id" element={<ProtectedRoute component={<CourseLessons />} />} />
+          <Route path="/learn/:id/lesson/:lessonId" element={<ProtectedRoute component={<LessonView />} />} />
           <Route path="/admin" element={<ProtectedRoute component={<AdminPanel />} requiredRole="ADMIN" />} />
         </Routes>
       </main>
