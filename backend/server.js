@@ -13,7 +13,7 @@ app.use(cors());
 // PostgreSQL connection
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || '127.0.0.1',
   database: process.env.DB_NAME || 'training_platform',
   password: process.env.DB_PASSWORD || 'postgres',
   port: process.env.DB_PORT || 5432,
@@ -407,6 +407,32 @@ app.post('/api/reviews', authMiddleware, async (req, res) => {
     
     if (!enrolled.rows[0]) {
       return res.status(403).json({ error: 'Must be enrolled to review' });
+    }
+    
+    const result = await pool.query(
+      'INSERT INTO reviews (user_id, course_id, rating, comment) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id, course_id) DO UPDATE SET rating=$3, comment=$4 RETURNING *',
+      [req.user.userId, courseId, rating, comment]
+    );
+    
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/courses/:id/reviews', authMiddleware, async (req, res) => {
+  const courseId = req.params.id;
+  const { rating, comment } = req.body;
+  
+  try {
+    // Check if user enrolled in course
+    const enrolled = await pool.query(
+      'SELECT * FROM enrollments WHERE user_id = $1 AND course_id = $2',
+      [req.user.userId, courseId]
+    );
+    
+    if (!enrolled.rows[0]) {
+      return res.status(403).json({ error: 'Musisz kupić kurs, aby dodać recenzję' });
     }
     
     const result = await pool.query(

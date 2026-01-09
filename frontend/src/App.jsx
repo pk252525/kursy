@@ -118,11 +118,15 @@ function CourseDetail() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
+  const [submittingReview, setSubmittingReview] = useState(false);
   const { token } = useAuth();
 
   useEffect(() => {
     fetchCourse();
-  }, [id]);
+    if (token) checkEnrollment();
+  }, [id, token]);
 
   const fetchCourse = async () => {
     try {
@@ -135,6 +139,19 @@ function CourseDetail() {
     }
   };
 
+  const checkEnrollment = async () => {
+    try {
+      const { data } = await axios.get(`${API}/enrollments`, { headers: { Authorization: `Bearer ${token}` } });
+      console.log('Enrollments:', data);
+      console.log('Current course ID:', id);
+      const enrolled = data.some(c => String(c.id) === String(id));
+      console.log('Is enrolled:', enrolled);
+      setIsEnrolled(enrolled);
+    } catch (err) {
+      console.error('Error checking enrollment:', err);
+    }
+  };
+
   const addToCart = async () => {
     if (!token) return alert('Please login first');
     try {
@@ -142,6 +159,26 @@ function CourseDetail() {
       alert('Added to cart!');
     } catch (err) {
       alert('Error adding to cart');
+    }
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!token) return alert('Please login first');
+    if (!isEnrolled) return alert('You must purchase this course to leave a review');
+    
+    setSubmittingReview(true);
+    try {
+      await axios.post(`${API}/courses/${id}/reviews`, reviewForm, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      });
+      alert('Review submitted successfully!');
+      setReviewForm({ rating: 5, comment: '' });
+      fetchCourse(); // Reload course to show new review
+    } catch (err) {
+      alert(err.response?.data?.error || 'Error submitting review');
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -165,6 +202,48 @@ function CourseDetail() {
             ))}
           </ul>
           <h3>Reviews ({course.reviews?.length || 0})</h3>
+          {token && isEnrolled && (
+            <div className="review-form">
+              <h4>Write a Review</h4>
+              <form onSubmit={submitReview}>
+                <div>
+                  <label>Rating: </label>
+                  <select 
+                    value={reviewForm.rating} 
+                    onChange={e => setReviewForm({ ...reviewForm, rating: parseInt(e.target.value) })}
+                  >
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="3">3 - Good</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="1">1 - Poor</option>
+                  </select>
+                </div>
+                <div>
+                  <textarea 
+                    placeholder="Share your experience with this course..." 
+                    value={reviewForm.comment}
+                    onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                    required
+                    rows="4"
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary" disabled={submittingReview}>
+                  {submittingReview ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </form>
+            </div>
+          )}
+          {token && !isEnrolled && (
+            <div className="review-info">
+              <p>Musisz kupić ten kurs, aby dodać recenzję.</p>
+            </div>
+          )}
+          {!token && (
+            <div className="review-info">
+              <p>Zaloguj się, aby dodać recenzję.</p>
+            </div>
+          )}
           {course.reviews?.map(review => (
             <div key={review.id} className="review">
               <p><strong>Rating: {review.rating}/5</strong></p>

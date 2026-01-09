@@ -581,6 +581,90 @@ body::before {
   color: var(--text-light);
 }
 
+.review-form {
+  border: 2px solid var(--neon-purple);
+  padding: 2rem;
+  margin: 2rem 0;
+  background: rgba(26, 31, 58, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(181, 55, 242, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.review-form h4 {
+  color: var(--neon-purple);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px var(--neon-purple);
+}
+
+.review-form form > div {
+  margin-bottom: 1.5rem;
+}
+
+.review-form label {
+  display: inline-block;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.review-form select {
+  background: rgba(10, 14, 39, 0.9);
+  border: 2px solid var(--neon-purple);
+  color: var(--text-light);
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.review-form select:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.review-form textarea {
+  width: 100%;
+  background: rgba(10, 14, 39, 0.9);
+  border: 2px solid var(--neon-purple);
+  color: var(--text-light);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.review-form textarea:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.review-form textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.review-info {
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  background: rgba(26, 31, 58, 0.6);
+  border: 2px solid rgba(255, 234, 0, 0.3);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.review-info p {
+  color: var(--neon-yellow);
+  margin: 0;
+  font-size: 1rem;
+}
+
 .course-sidebar {
   position: sticky;
   top: 2rem;
