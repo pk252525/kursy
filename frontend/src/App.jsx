@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 import './App.css';
 
 const API = 'http://localhost:5000/api';
@@ -499,7 +500,9 @@ function LessonView() {
 
       <div className="lesson-content">
         {lesson.content?.markdown ? (
-          <div className="markdown-content" dangerouslySetInnerHTML={{ __html: renderMarkdown(lesson.content.markdown) }} />
+          <div className="markdown-content">
+            <ReactMarkdown>{lesson.content.markdown}</ReactMarkdown>
+          </div>
         ) : (
           <p>Brak treści lekcji</p>
         )}
@@ -525,56 +528,7 @@ function LessonView() {
   );
 }
 
-// Prosta funkcja do renderowania Markdown (podstawowa wersja)
-function renderMarkdown(markdown) {
-  if (!markdown) return '';
-  
-  let html = markdown
-    // Code blocks
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-      return `<pre><code class="language-${lang || 'plaintext'}">${escapeHtml(code.trim())}</code></pre>`;
-    })
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    // Inline code
-    .replace(/`(.*?)`/g, '<code>$1</code>')
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    // Unordered lists
-    .replace(/^\- (.*$)/gim, '<li>$1</li>')
-    // Blockquotes
-    .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
-    // Line breaks
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>');
 
-  // Wrap lists
-  html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-  
-  // Wrap in paragraphs if not already wrapped
-  if (!html.startsWith('<')) {
-    html = '<p>' + html + '</p>';
-  }
-
-  return html;
-}
-
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
-}
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
