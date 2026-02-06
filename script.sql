@@ -56,7 +56,7 @@ CREATE TABLE transactions (
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     course_id UUID REFERENCES courses(id) ON DELETE CASCADE,
     amount_cents INT NOT NULL,
-    currency VARCHAR(10) DEFAULT 'usd',
+    currency VARCHAR(10) DEFAULT 'pln',
     status VARCHAR(20) NOT NULL CHECK (status IN ('succeeded','failed','pending')),
     stripe_payment_intent_id VARCHAR(255),
     stripe_checkout_session_id VARCHAR(255),

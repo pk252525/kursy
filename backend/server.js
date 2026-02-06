@@ -174,6 +174,58 @@ app.delete('/api/courses/:id', authMiddleware, adminMiddleware, async (req, res)
   }
 });
 
+// ============ LESSONS ROUTES ============
+app.post('/api/lessons', authMiddleware, adminMiddleware, async (req, res) => {
+  const { title, course_id, lesson_order, content } = req.body;
+  
+  try {
+    const result = await pool.query(
+      'INSERT INTO lessons (course_id, title, lesson_order, content) VALUES ($1, $2, $3, $4) RETURNING *',
+      [course_id, title, lesson_order || 1, JSON.stringify(content)]
+    );
+    
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/lessons/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM lessons WHERE id = $1', [req.params.id]);
+    
+    if (!result.rows[0]) return res.status(404).json({ error: 'Lesson not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/lessons/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  const { title, course_id, lesson_order, content } = req.body;
+  
+  try {
+    const result = await pool.query(
+      'UPDATE lessons SET title=$1, course_id=$2, lesson_order=$3, content=$4 WHERE id=$5 RETURNING *',
+      [title, course_id, lesson_order || 1, JSON.stringify(content), req.params.id]
+    );
+    
+    if (!result.rows[0]) return res.status(404).json({ error: 'Lesson not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/api/lessons/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM lessons WHERE id = $1', [req.params.id]);
+    res.json({ message: 'Lesson deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ============ CART ROUTES ============
 app.get('/api/cart', authMiddleware, async (req, res) => {
   try {
@@ -297,7 +349,7 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
     
     const lineItems = cartItems.rows.map(course => ({
       price_data: {
-        currency: 'usd',
+        currency: 'pln',
         product_data: { name: course.title, description: course.description },
         unit_amount: course.price_cents
       },

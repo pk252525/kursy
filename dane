@@ -10,7 +10,7 @@ VALUES
 
 INSERT INTO courses (title, description, price_cents, category, difficulty, instructor)
 VALUES
-('Kurs Cisco', 'Kurs wprowadzający do programowania w Pythonie.', 49900, 'Programowanie', 'Beginner', 'Dr. Adam Malinowski'),
+('Kurs Python', 'Kurs wprowadzający do programowania w Pythonie.', 49900, 'Programowanie', 'Beginner', 'Dr. Adam Malinowski'),
 ('Zaawansowany SQL', 'Optymalizacja zapytań i projektowanie baz danych.', 79900, 'Bazy danych', 'Advanced', 'Prof. Katarzyna Zielińska'),
 ('Frontend z React', 'Tworzenie aplikacji webowych w React.', 69900, 'Web Development', 'Intermediate', 'Michał Lewandowski'),
 ('Machine Learning w praktyce', 'Uczenie maszynowe z przykładami w Pythonie.', 99900, 'AI/ML', 'Advanced', 'Dr. Piotr Kamiński');

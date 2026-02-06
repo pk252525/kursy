@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import './App.css';
 
 const API = 'http://localhost:5000/api';
@@ -12,6 +13,33 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const [loading, setLoading] = useState(true);
+
+  // Przywróć dane użytkownika z tokenu (dekoduj JWT)
+  useEffect(() => {
+    if (token) {
+      try {
+        // Dekoduj JWT token (bez weryfikacji na froncie, backend zweryfikuje)
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decodedToken = JSON.parse(jsonPayload);
+        setUser({
+          userId: decodedToken.userId,
+          email: decodedToken.email,
+          role: decodedToken.role
+        });
+      } catch (err) {
+        console.error('Error decoding token:', err);
+        localStorage.removeItem('token');
+        setToken(null);
+      }
+    }
+    setLoading(false);
+  }, [token]);
 
   useEffect(() => {
     if (token) localStorage.setItem('token', token);
@@ -19,7 +47,7 @@ function AuthProvider({ children }) {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+    <AuthContext.Provider value={{ user, setUser, token, setToken, loading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -95,7 +123,7 @@ function Home() {
             <p className="description">{course.description}</p>
             <p className="meta">{course.category} • {course.difficulty}</p>
             <p className="instructor">by {course.instructor}</p>
-            <p className="price">${course.price}</p>
+            <p className="price">{course.price} zł</p>
             <div className="actions">
               <Link to={`/course/${course.id}`} className="btn btn-primary">Zobacz szczegóły</Link>
               <button onClick={() => addToCart(course.id)} className="btn btn-secondary">Dodaj do koszyka</button>
@@ -253,7 +281,7 @@ function CourseDetail() {
           ))}
         </div>
         <div className="course-sidebar">
-          <p className="price">${course.price}</p>
+          <p className="price">{course.price} zł</p>
           <button onClick={addToCart} className="btn btn-primary btn-large">Dodaj do koszyka</button>
         </div>
       </div>
@@ -501,7 +529,7 @@ function LessonView() {
       <div className="lesson-content">
         {lesson.content?.markdown ? (
           <div className="markdown-content">
-            <ReactMarkdown>{lesson.content.markdown}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content.markdown}</ReactMarkdown>
           </div>
         ) : (
           <p>Brak treści lekcji</p>
@@ -610,7 +638,7 @@ function Cart() {
               <div key={course.id} className="cart-item">
                 <div>
                   <h4>{course.title}</h4>
-                  <p>${course.price}</p>
+                  <p>{course.price} zł</p>
                 </div>
                 <button onClick={() => removeFromCart(course.id)} className="btn btn-small">Usuń</button>
               </div>
@@ -619,11 +647,11 @@ function Cart() {
           <div className="discount-section">
             <input type="text" placeholder="Kod rabatowy" value={discountCode} onChange={e => setDiscountCode(e.target.value)} />
             <button onClick={validateDiscount} className="btn btn-secondary">Zastosuj</button>
-            {discount && <p>Kod rabatowy zastosowany! Oszczędzasz ${discount.discount}</p>}
+            {discount && <p>Kod rabatowy zastosowany! Oszczędzasz {discount.discount} zł</p>}
           </div>
           <div className="cart-summary">
-            <p>Suma częściowa: ${total.toFixed(2)}</p>
-            {discount && <p>Suma końcowa: ${finalTotal.toFixed(2)}</p>}
+            <p>Suma częściowa: {total.toFixed(2)} zł</p>
+            {discount && <p>Suma końcowa: {finalTotal.toFixed(2)} zł</p>}
             <button onClick={handleCheckout} className="btn btn-primary btn-large">Zapisz się na kursy</button>
           </div>
         </>
@@ -635,15 +663,26 @@ function Cart() {
 function AdminPanel() {
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [tab, setTab] = useState('courses');
   const [formData, setFormData] = useState({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' });
+  const [lessonFormData, setLessonFormData] = useState({ title: '', course_id: '', lesson_order: '', content: '' });
   const [editingId, setEditingId] = useState(null);
+  const [editingLessonId, setEditingLessonId] = useState(null);
+  const [selectedCourseId, setSelectedCourseId] = useState('');
   const { token } = useAuth();
 
   useEffect(() => {
     if (tab === 'courses') fetchCourses();
-    else fetchUsers();
+    else if (tab === 'users') fetchUsers();
+    else if (tab === 'lessons') fetchLessons();
   }, [tab]);
+
+  useEffect(() => {
+    if (tab === 'lessons' && selectedCourseId) {
+      fetchLessons();
+    }
+  }, [selectedCourseId]);
 
   const fetchCourses = async () => {
     try {
@@ -658,6 +697,17 @@ function AdminPanel() {
     try {
       const { data } = await axios.get(`${API}/admin/users`, { headers: { Authorization: `Bearer ${token}` } });
       setUsers(data);
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
+
+  const fetchLessons = async () => {
+    try {
+      if (selectedCourseId) {
+        const { data } = await axios.get(`${API}/courses/${selectedCourseId}`);
+        setLessons(data.lessons || []);
+      }
     } catch (err) {
       console.error('Error:', err);
     }
@@ -679,6 +729,34 @@ function AdminPanel() {
     }
   };
 
+  const handleLessonSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedCourseId) return alert('Wybierz kurs');
+    
+    try {
+      const payload = {
+        title: lessonFormData.title,
+        course_id: selectedCourseId,
+        lesson_order: parseInt(lessonFormData.lesson_order) || 1,
+        content: {
+          duration: '',
+          markdown: lessonFormData.content
+        }
+      };
+
+      if (editingLessonId) {
+        await axios.put(`${API}/lessons/${editingLessonId}`, payload, { headers: { Authorization: `Bearer ${token}` } });
+      } else {
+        await axios.post(`${API}/lessons`, payload, { headers: { Authorization: `Bearer ${token}` } });
+      }
+      setLessonFormData({ title: '', course_id: '', lesson_order: '', content: '' });
+      setEditingLessonId(null);
+      fetchLessons();
+    } catch (err) {
+      alert('Błąd podczas zapisywania lekcji: ' + (err.response?.data?.error || err.message));
+    }
+  };
+
   const deleteCourse = async (id) => {
     if (window.confirm('Usunąć ten kurs?')) {
       try {
@@ -686,6 +764,17 @@ function AdminPanel() {
         fetchCourses();
       } catch (err) {
         alert('Błąd podczas usuwania kursu');
+      }
+    }
+  };
+
+  const deleteLesson = async (id) => {
+    if (window.confirm('Usunąć tę lekcję?')) {
+      try {
+        await axios.delete(`${API}/lessons/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+        fetchLessons();
+      } catch (err) {
+        alert('Błąd podczas usuwania lekcji');
       }
     }
   };
@@ -705,6 +794,7 @@ function AdminPanel() {
     <div className="admin-panel">
       <div className="admin-tabs">
         <button onClick={() => setTab('courses')} className={tab === 'courses' ? 'active' : ''}>Kursy</button>
+        <button onClick={() => setTab('lessons')} className={tab === 'lessons' ? 'active' : ''}>Lekcje</button>
         <button onClick={() => setTab('users')} className={tab === 'users' ? 'active' : ''}>Użytkownicy</button>
       </div>
 
@@ -755,6 +845,117 @@ function AdminPanel() {
         </div>
       )}
 
+      {tab === 'lessons' && (
+        <div>
+          <div className="lesson-section">
+            <h3>Wybierz kurs</h3>
+            <select value={selectedCourseId} onChange={e => setSelectedCourseId(e.target.value)} className="course-selector">
+              <option value="">-- Wybierz kurs --</option>
+              {courses.map(course => (
+                <option key={course.id} value={course.id}>{course.title}</option>
+              ))}
+            </select>
+          </div>
+
+          {selectedCourseId && (
+            <>
+              <form onSubmit={handleLessonSubmit} className="admin-form lesson-form">
+                <h3>{editingLessonId ? 'Edytuj lekcję' : 'Utwórz nową lekcję'}</h3>
+                <input 
+                  type="text" 
+                  placeholder="Tytuł lekcji" 
+                  value={lessonFormData.title} 
+                  onChange={e => setLessonFormData({ ...lessonFormData, title: e.target.value })} 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  placeholder="Kolejność lekcji" 
+                  value={lessonFormData.lesson_order} 
+                  onChange={e => setLessonFormData({ ...lessonFormData, lesson_order: e.target.value })} 
+                  min="1"
+                  required 
+                />
+                <textarea 
+                  placeholder="Zawartość lekcji (markdown)" 
+                  value={lessonFormData.content} 
+                  onChange={e => setLessonFormData({ ...lessonFormData, content: e.target.value })} 
+                  required 
+                  rows="15"
+                  style={{ fontFamily: 'monospace' }}
+                ></textarea>
+                <button type="submit" className="btn btn-primary">{editingLessonId ? 'Zaktualizuj lekcję' : 'Utwórz lekcję'}</button>
+                {editingLessonId && (
+                  <button 
+                    type="button" 
+                    onClick={() => { 
+                      setEditingLessonId(null); 
+                      setLessonFormData({ title: '', course_id: '', lesson_order: '', content: '' }); 
+                    }} 
+                    className="btn btn-secondary"
+                  >
+                    Anuluj
+                  </button>
+                )}
+              </form>
+
+              <div className="lessons-management">
+                <h3>Lekcje w tym kursie ({lessons.length})</h3>
+                {lessons.length === 0 ? (
+                  <p>Brak lekcji w tym kursie</p>
+                ) : (
+                  <table className="lessons-table">
+                    <thead>
+                      <tr>
+                        <th>Lp.</th>
+                        <th>Tytuł</th>
+                        <th>Zawartość</th>
+                        <th>Akcje</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lessons.sort((a, b) => (a.lesson_order || 0) - (b.lesson_order || 0)).map((lesson, idx) => (
+                        <tr key={lesson.id}>
+                          <td>{lesson.lesson_order || idx + 1}</td>
+                          <td>{lesson.title}</td>
+                          <td>
+                            <div style={{ maxHeight: '100px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                              {lesson.content?.markdown?.substring(0, 50) || 'Brak zawartości'}...
+                            </div>
+                          </td>
+                          <td>
+                            <button 
+                              onClick={() => {
+                                setEditingLessonId(lesson.id);
+                                setLessonFormData({
+                                  title: lesson.title,
+                                  course_id: selectedCourseId,
+                                  lesson_order: lesson.lesson_order || 1,
+                                  content: lesson.content?.markdown || ''
+                                });
+                              }}
+                              className="btn btn-small"
+                            >
+                              Edytuj
+                            </button>
+                            <button 
+                              onClick={() => deleteLesson(lesson.id)} 
+                              className="btn btn-small btn-danger"
+                            >
+                              Usuń
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       {tab === 'users' && (
         <table className="users-table">
           <thead>
@@ -792,12 +993,16 @@ function ProtectedRoute({ component, requiredRole }) {
 
 // ========== MAIN APP ==========
 function AppContent() {
-  const { token, setToken, user } = useAuth();
+  const { token, setToken, user, loading } = useAuth();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
   };
+
+  if (loading) {
+    return <div className="app-container"><div className="loading">Ładowanie...</div></div>;
+  }
 
   return (
     <div className="app-container">
