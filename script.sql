@@ -26,6 +26,7 @@ CREATE TABLE courses (
     category VARCHAR(100),
     difficulty VARCHAR(50),
     instructor VARCHAR(255),
+    image_url TEXT,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -36,7 +37,6 @@ CREATE TABLE lessons (
     course_id UUID REFERENCES courses(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     content JSONB,
-    content_url TEXT,
     lesson_order INT,
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -95,5 +95,3 @@ CREATE TABLE reviews (
     UNIQUE(user_id, course_id)
 );
 
--- Dodanie kolumny content do istniejącej tabeli lessons
-ALTER TABLE lessons ADD COLUMN IF NOT EXISTS content JSONB;
