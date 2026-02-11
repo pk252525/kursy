@@ -306,3 +306,51 @@ VALUES (
     }'::jsonb,
     3
 );
+
+-- ============ KURS VIBE CODING – METODA ADAM CODING ============
+INSERT INTO courses (title, description, price_cents, category, difficulty, instructor)
+VALUES
+(
+    'Vibe Coding: Programowanie z AI metodą Adam Coding',
+    'Poznaj nowy paradygmat programowania, w którym to AI pisze kod, a Ty nadajesz kierunek. Vibe coding pozwala tworzyć aplikacje opisując jedynie intencje. Kurs zawiera humorystyczne wstawki o Adamie, który zawsze twierdzi, że zrobiłby to lepiej.',
+    99900,
+    'AI',
+    'Beginner',
+    'Prof dr hab. Adam Paśniewski'
+);
+
+-- Lekcja 1: Wprowadzenie do Vibe Coding
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding: Programowanie z AI metodą Adam Coding' LIMIT 1),
+    'Wprowadzenie do Vibe Coding',
+    '{
+        "duration": "45 min",
+        "markdown": "# Wprowadzenie do Vibe Coding\n\n## Czym jest vibe coding?\n\n**Vibe coding** to paradygmat programowania, w którym:\n- opisujesz problem w kilku zdaniach,\n- AI generuje kod,\n- Ty kierujesz, testujesz i poprawiasz,\n- a Adam z boku mówi: *„Ja bym to zrobił w 3 linijkach.”*\n\nTo programowanie oparte na **intencjach**, nie na składni.\n\n## Dlaczego vibe coding powstał?\n\nTermin wprowadził **Andrej Karpathy (2025)**, zauważając, że:\n- modele językowe potrafią pisać kod szybciej niż człowiek,\n- programista staje się *reżyserem*, nie *maszynistą*,\n- próg wejścia do tworzenia oprogramowania drastycznie spada.\n\nAdam twierdzi, że on to przewidział już w 2017, ale nie ma na to dowodów.\n\n## Główne założenia\n\n| Koncepcja | Opis |\n|---|---|\n| **Prompt-first** | Najpierw opisujesz, potem kod powstaje sam |\n| **Iteracyjne poprawki** | „Popraw to”, „dodaj logikę”, „zrób ładniej” |\n| **AI jako partner** | Nie narzędzie, ale współprogramista |\n| **Flow & vibe** | Kod powstaje w rytmie Twojej myśli |\n\n## Przykład vibe codingu\n\n```text\nUżytkownik: Zrób mi API do listy zadań z endpointami CRUD.\nAI: Jasne, oto gotowy serwer Express z MongoDB.\nAdam: A gdzie walidacja? Ja bym zrobił lepiej.\n```\n\n## 📝 Ćwiczenie\n\nOpisz w 3 zdaniach aplikację, którą chcesz stworzyć. Nie używaj żadnego kodu. Tylko vibe."
+    }'::jsonb,
+    1
+);
+
+-- Lekcja 2: Metoda Adam Coding
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding: Programowanie z AI metodą Adam Coding' LIMIT 1),
+    'Metoda Adam Coding',
+    '{
+        "duration": "60 min",
+        "markdown": "# Metoda Adam Coding\n\n## Kim jest Adam?\n\nNikt nie wie.\n\nAle w vibe codingu „Adam Coding” oznacza:\n- minimalizm,\n- maksymalną pewność siebie,\n- oraz nieustanne powtarzanie, że *„da się prościej”*.\n\n## Zasady Adam Coding\n\n| Zasada | Opis |\n|---|---|\n| **1. Najpierw vibe, potem kod** | Nie zaczynaj od technologii, tylko od intencji |\n| **2. Kod ma być prosty** | Jeśli AI generuje 200 linii, poproś o 20 |\n| **3. Iteruj bez litości** | „Zrób to czytelniej”, „zrób to szybciej”, „zrób to jak Adam” |\n| **4. Nie bój się mówić AI, że się myli** | AI nie ma ego, Adam ma |\n\n## Przykład promptu w stylu Adam Coding\n\n```text\nZrób mi prosty backend do notatek. Tylko najważniejsze funkcje. Zero zbędnych rzeczy. Adam style.\n```\n\nAI odpowie kodem, a Ty iterujesz, aż poczujesz vibe.\n\n## Typowy workflow\n\n```\n1. Opisz problem w 1–3 zdaniach\n2. AI generuje kod\n3. Ty testujesz\n4. Mówisz AI: „popraw”, „dodaj”, „uproszcz”\n5. Adam mówi: „ja bym to zrobił w Rust”\n```\n\n## 📝 Ćwiczenie\n\nNapisz prompt w stylu Adam Coding do stworzenia mini-aplikacji, która rozwiązuje Twój codzienny problem."
+    }'::jsonb,
+    2
+);
+
+-- Lekcja 3: Praktyka vibe codingu z AI
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding: Programowanie z AI metodą Adam Coding' LIMIT 1),
+    'Praktyka vibe codingu z AI',
+    '{
+        "duration": "70 min",
+        "markdown": "# Praktyka vibe codingu z AI\n\n## Jak pracować z AI w vibe codingu?\n\n### 1. Opisuj intencje, nie implementacje\nZamiast:\n```text\nNapisz mi funkcję w Pythonie, która iteruje po liście i filtruje wartości.\n```\nPowiedz:\n```text\nChcę funkcję, która zwróci tylko ważne elementy listy.\n```\nAdam dodałby: „ważne, czyli jakie?”, ale to już Twój vibe.\n\n### 2. Używaj języka naturalnego\nAI rozumie:\n- „zrób to szybciej”,\n- „ładniej”,\n- „bardziej jak senior dev”,\n- „mniej jak Adam”.\n\n### 3. Iteruj aż poczujesz flow\nKażda iteracja to nowy vibe.\n\n## Przykład pełnego procesu\n\n```text\nUżytkownik: Zrób mi prostą aplikację do budżetu domowego.\nAI: (generuje kod)\nUżytkownik: Dodaj wykresy.\nAI: (dodaje)\nUżytkownik: Zrób UI bardziej aesthetic.\nAI: (poprawia)\nAdam: A gdzie dark mode?\n```\n\n## Najczęstsze błędy\n\n| Błąd | Jak naprawić |\n|---|---|\n| Zbyt techniczny prompt | Uprość język |\n| Za dużo szczegółów | Pozwól AI zaproponować rozwiązanie |\n| Brak iteracji | Poprawiaj, aż będzie dobrze |\n| Słuchanie Adama | Nie rób tego |\n\n## 📝 Ćwiczenie\n\nWybierz dowolny projekt i przeprowadź 5 iteracji vibe codingu. Zapisz, jak zmieniały się Twoje intencje."
+    }'::jsonb,
+    3
+);
