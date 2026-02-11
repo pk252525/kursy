@@ -306,3 +306,56 @@ VALUES (
     }'::jsonb,
     3
 );
+
+-- ============ KURS VIBE CODING - METODĄ ADAM CODING ============
+INSERT INTO courses (title, description, price_cents, category, difficulty, instructor)
+VALUES
+('Vibe Coding - Metodą Adam Coding', 'Naucz się kodować z pozytywnym vibe`em! Metoda Adam Coding łączy dobre praktyki programowania z pozytywną energią i przyjemością pisania kodu.', 79900, 'Programowanie', 'Beginner', 'Adam Paśniewski');
+
+-- Lekcja 1: Czym jest Vibe Coding?
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding - Metodą Adam Coding' LIMIT 1),
+    'Czym jest Vibe Coding?',
+    '{
+        "duration": "40 min",
+        "markdown": "# Czym jest Vibe Coding?\n\n## Filozofia Vibe Coding\n\n**Vibe Coding** to nowatorska metoda programowania, która łączy:\n- **Przyjemność** - kodowanie to powinno być zabawne!\n- **Produktywność** - dobra energia = lepszy kod\n- **Minimalizm** - KISS (Keep It Simple, Stupid)\n- **Flow State** - całkowite zanurzenie w kodzie\n\n## Kluczowe Zasady Vibe Coding\n\n| Zasada | Opis |\n|---|---|\n| **Good Vibes** | Pisz kod z pozytywną energią |\n| **Clean Code** | Kod powinien być piękny i zrozumiały |\n| **No Pressure** | Bez stresu - debugging to część zabawy |\n| **Community** | Dziel się wiedzą i wspieraj innych |\n| **Continuous Learning** | Każdy błąd to lekcja |\n\n## Dlaczego Vibe Coding?\n\n✅ Zwiększona kreatywność  \n✅ Mniej stresujące debugowanie  \n✅ Lepszy kod przy mniejszym wysiłku  \n✅ Większa satysfakcja z pracy  \n✅ Lepsze relacje w zespole  \n\n## Historia metody\n\nMetodę Vibe Coding opracował **Adam Paśniewski**, który zauważył, że developerzy są bardziej produktywni i szczęśliwi, gdy kodowanie traktują jako **twórcze hobby** zamiast stresujące obowiązku.\n\n## 🎯 Cel kursu\n\nW tym kursie nauczysz się:\n- Jak przygotować środowisko do kodowania z dobrym vibem\n- Techniki utrzymywania flow state\n- Jak pisać czytelny i piękny kod\n- Debugging bez frustracji\n- Balans pracy i zabawy"
+    }'::jsonb,
+    1
+);
+
+-- Lekcja 2: Przygotowanie środowiska - Good Vibes Setup
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding - Metodą Adam Coding' LIMIT 1),
+    'Przygotowanie środowiska - Good Vibes Setup',
+    '{
+        "duration": "50 min",
+        "markdown": "# Przygotowanie środowiska - Good Vibes Setup\n\n## Fizyczne otoczenie\n\n### Ergonomia\n- ✅ Wygodny fotel z dobrym wsparciem\n- ✅ Monitor na wysokości oczu\n- ✅ Klawiatura i myszka na wygodnej wysokości\n- ✅ Oświetlenie - nie za jasno, nie za ciemno\n\n### Atmosfera\n- 🎵 Muzyka do kodowania (lo-fi, ambient, chillhop)\n- ☕ Ulubiony napój (kawa, herbata, woda)\n- 🌿 Roślina na biurku (zwiększa poziom tlenu)\n- 🚫 Minimalizuj rozpraszczacze\n\n## Setup edytora - Visual Studio Code\n\n### Polecane rozszerzenia\n\n```json\n{\n  \\\"extensions\\\": [\n    \\\"One Dark Pro\\\",\n    \\\"Prettier - Code Formatter\\\",\n    \\\"ESLint\\\",\n    \\\"GitLens\\\",\n    \\\"Thunder Client\\\",\n    \\\"Better Comments\\\"\n  ]\n}\n```\n\n### Konfiguracja settings.json\n\n```json\n{\n  \\\"editor.fontSize\\\": 16,\n  \\\"editor.formatOnSave\\\": true,\n  \\\"editor.defaultFormatter\\\": \\\"esbenp.prettier-vscode\\\",\n  \\\"editor.fontFamily\\\": \\\"Fira Code\\\",\n  \\\"editor.fontLigatures\\\": true,\n  \\\"workbench.colorTheme\\\": \\\"One Dark Pro\\\",\n  \\\"editor.minimap.enabled\\\": false\n}\n```\n\n## Keyboard Shortcuts - Przyspiesz swoją pracę\n\n| Skrót | Akcja |\n|---|---|\n| `Ctrl+Shift+P` | Command Palette |\n| `Ctrl+/` | Toggle comment |\n| `Alt+Up/Down` | Move line |\n| `Ctrl+Shift+L` | Select all occurrences |\n| `F5` | Debug |\n\n## 🎵 Playlista do Vibe Coding\n\n- **Lofi Chill Beats** - 2 hours\n- **Ambient Programming** - 3 hours\n- **Synthwave Retro** - 1.5 hours\n- **Nature Sounds** - Dla relaksu\n\n## 📝 Ćwiczenie\n\nSetup swoje idealne środowisko do kodowania:\n1. Zainstaluj VS Code\n2. Dodaj polecane rozszerzenia\n3. Skonfiguruj settings.json\n4. Stwórz playlistę na Spotify\n5. Przygotuj sobie napój\n6. Zacoduj swoją pierwszą linię z dobrym vibem!"
+    }'::jsonb,
+    2
+);
+
+-- Lekcja 3: Techniki Flow State i Produktywności
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding - Metodą Adam Coding' LIMIT 1),
+    'Techniki Flow State i Produktywności',
+    '{
+        "duration": "55 min",
+        "markdown": "# Techniki Flow State i Produktywności\n\n## Czym jest Flow State?\n\nFlow State to stan, w którym jesteś **całkowicie zanurzony** w kodowaniu. Czas mija niezauważenie, a kod pisze się **jakby sam**.\n\n## Cechy Flow State\n\n- 🎯 Całkowita koncentracja\n- ⏱️ Utrata poczucia czasu\n- 😊 Przyjemność z pracy\n- 💪 Czujesz się potężny\n- ✨ Kod pisuje się naturalnie\n\n## Jak osiągnąć Flow State?\n\n### 1. Pomodoro Technique\n\n```\nZasada: 25 minut kodowania + 5 minut przerwy\n\nCykl:\n- 25 min FOKUS (bez rozpraszaczy!)\n- 5 min odpoczynek\n- Powtórz 4 razy\n- 15-30 min dłuższa przerwa\n```\n\n### 2. Eliminacja rozpraszyczy\n\n```bash\n# Zamknij:\n- Notification z Slack, Discord, Messengera\n- Przeglądarkę (chyba że potrzebujesz dokumentacji)\n- Telefon w innym pomieszczeniu\n```\n\n### 3. Warmup - Rozgrzewka\n\nZanim zaczniesz poważny kod:\n- 5 min czytania dokumentacji\n- Przejrzenie ostatniego kodu\n- Napisanie prostego skryptu\n\n## Produktywność - Velocity Chart\n\n| Pora dnia | Najlepsze do | Tip |\n|---|---|---|\n| **Rano** | Nowe features | Mózg najświeższy |\n| **Noon** | Codereview | Energia spadna |\n| **Wieczór** | Dokumentacja | Mniej wymagających zadań |\n\n## Bad Habits to Unikać\n\n❌ **Context switching** - Nie przełączaj się między projektami  \n❌ **Phone scrolling** - Telefon to vibe killer  \n❌ **Open too many tabs** - Umysł się rozprasza  \n❌ **Coding while tired** - Debugowanie będzie horrorowe  \n❌ **Skip breaks** - Przerwy to nie słabość  \n\n## 📝 Ćwiczenie\n\n1. Włącz Pomodoro timer\n2. Zamknij wszystkie rozpraszacze\n3. Napisz jakiś kod przez 25 minut\n4. Zanotuj jak się czujesz\n5. Powtórz cztery razy\n\nZauważ różnicę w skupieniu!"
+    }'::jsonb,
+    3
+);
+
+-- Lekcja 4: Clean Code z Vibe Coding
+INSERT INTO lessons (course_id, title, content, lesson_order)
+VALUES (
+    (SELECT id FROM courses WHERE title = 'Vibe Coding - Metodą Adam Coding' LIMIT 1),
+    'Debugging bez stresu - Zen podejście',
+    '{
+        "duration": "55 min",
+        "markdown": "# Debugging bez stresu - Zen podejście do błędów\n\n## Błędy są normalne\n\nKażdy developer ma buggi. Nawet najlepszy kod zawiera błędy. To nie jest porażka - to lekcja!\n\nVibe Coding mówi: Debugowanie to część zabawy, nie punishment.\n\n## Filozofia Zen Debugging\n\n1. Zachowaj spokój - panika pogarsza sytuację\n2. Czytaj komunikaty błędów - one ci mówią co jest nie tak\n3. Reprodukuj błąd - jeśli wiesz kiedy się dzieje, jesteś blisko rozwiązania\n4. Wydziel problem - zawęź do najmniejszej sekcji kodu\n5. Testuj hipotezę - jedna rzecz na raz\n6. Świętuj znalezienie - każdy bug to wygrana!\n\n## Strategia debugowania krok po kroku\n\n### Krok 1: Zidentyfikuj symptomy\n- Jaki jest błąd?\n- Kiedy się pojawia?\n- Co przed tym było?\n\n### Krok 2: Oddziel logikę\n- Podziel kod na sekcje\n- Każda sekcja powinna robić jedną rzecz\n- Łatwiej znaleźć błąd w mniejszym kodzie\n\n### Krok 3: Użyj logowania\n- Dodaj console.log w kluczowych miejscach\n- Wypisz wartości zmiennych\n- Obserwuj przepływ programu\n\n### Krok 4: Debugger\n- VS Code ma wbudowany debugger\n- Postawiaj breakpointy\n- Przejdź kod linia po linii\n- Obserwuj zmienne\n\n## Narzędzia do debugowania\n\nBrowser DevTools - dla frontend-u:\n- Sources - przeglądaj kod\n- Console - wypisuj logi\n- Network - sprawdzaj requesty\n- Performance - analizuj szybkość\n\nVS Code Debugger - dla backendu:\n- Breakpointy\n- Watch expressions\n- Call stack\n- Step over, step into, step out\n\n## Red flags - co sprawdzić\n\nJeśli coś nie działa, sprawdź najpierw:\n- Czy server jest uruchomiony?\n- Czy port jest prawidłowy?\n- Czy parametry są prawidłowe?\n- Czy dane mają prawidłowy format?\n- Czy odpowiedź API to co oczekujesz?\n\n## Post-mortem - nauka z błędów\n\nGdy znowu natkniesz się na ten sam bug:\n- Zanotuj co go spowodowało\n- Dodaj test aby go złapać\n- Podziel się wiedzą z zespołem\n- Śmiej się z siebie - wszyscy robimy błędy\n\n## 📝 Ćwiczenie\n\nWeź dowolny projekt i:\n1. Umyślnie wprowadź 3 błędy\n2. Debuguj każdy używając logów\n3. Następnie debuguj używając debuggera\n4. Zanotuj który sposób był szybszy\n5. Świętuj każde znalezione błędu!"
+    }'::jsonb,
+    4
+);

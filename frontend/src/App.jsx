@@ -119,6 +119,11 @@ function Home() {
       <div className="courses-grid">
         {paginatedCourses.map(course => (
           <div key={course.id} className="course-card">
+            {course.image_url && (
+              <div className="course-image">
+                <img src={course.image_url} alt={course.title} />
+              </div>
+            )}
             <h3>{course.title}</h3>
             <p className="description">{course.description}</p>
             <p className="meta">{course.category} • {course.difficulty}</p>
@@ -217,6 +222,11 @@ function CourseDetail() {
   return (
     <div className="course-detail">
       <div className="course-header">
+        {course.image_url && (
+          <div className="course-header-image">
+            <img src={course.image_url} alt={course.title} />
+          </div>
+        )}
         <h1>{course.title}</h1>
         <p className="meta">{course.category} • {course.difficulty} • by {course.instructor}</p>
       </div>
@@ -379,6 +389,11 @@ function Dashboard() {
         <div className="courses-grid">
           {enrollments.map(course => (
             <div key={course.id} className="course-card">
+              {course.image_url && (
+                <div className="course-image">
+                  <img src={course.image_url} alt={course.title} />
+                </div>
+              )}
               <h3>{course.title}</h3>
               <p>{course.description}</p>
               <Link to={`/learn/${course.id}`} className="btn btn-primary">Przejdź do kursu</Link>
@@ -421,6 +436,11 @@ function CourseLessons() {
     <div className="course-lessons">
       <div className="course-lessons-header">
         <Link to="/dashboard" className="back-link">← Powrót do moich kursów</Link>
+        {course.image_url && (
+          <div className="course-lessons-image">
+            <img src={course.image_url} alt={course.title} />
+          </div>
+        )}
         <h1>{course.title}</h1>
         <p className="course-meta">{course.category} • {course.difficulty}</p>
       </div>
@@ -665,7 +685,7 @@ function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [tab, setTab] = useState('courses');
-  const [formData, setFormData] = useState({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' });
+  const [formData, setFormData] = useState({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '', image_url: '' });
   const [lessonFormData, setLessonFormData] = useState({ title: '', course_id: '', lesson_order: '', content: '' });
   const [editingId, setEditingId] = useState(null);
   const [editingLessonId, setEditingLessonId] = useState(null);
@@ -721,7 +741,7 @@ function AdminPanel() {
       } else {
         await axios.post(`${API}/courses`, formData, { headers: { Authorization: `Bearer ${token}` } });
       }
-      setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' });
+      setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '', image_url: '' });
       setEditingId(null);
       fetchCourses();
     } catch (err) {
@@ -813,8 +833,9 @@ function AdminPanel() {
               <option value="Advanced">Zaawansowany</option>
             </select>
             <input type="text" placeholder="Instruktor" value={formData.instructor} onChange={e => setFormData({ ...formData, instructor: e.target.value })} />
+            <input type="url" placeholder="URL obrazka (np. https://example.com/image.jpg)" value={formData.image_url} onChange={e => setFormData({ ...formData, image_url: e.target.value })} />
             <button type="submit" className="btn btn-primary">{editingId ? 'Zaktualizuj' : 'Utwórz'}</button>
-            {editingId && <button type="button" onClick={() => { setEditingId(null); setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '' }); }} className="btn btn-secondary">Anuluj</button>}
+            {editingId && <button type="button" onClick={() => { setEditingId(null); setFormData({ title: '', description: '', price: '', category: '', difficulty: '', instructor: '', image_url: '' }); }} className="btn btn-secondary">Anuluj</button>}
           </form>
 
           <table className="courses-table">

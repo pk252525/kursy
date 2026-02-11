@@ -134,12 +134,12 @@ app.get('/api/courses/:id', async (req, res) => {
 });
 
 app.post('/api/courses', authMiddleware, adminMiddleware, async (req, res) => {
-  const { title, description, price, category, difficulty, instructor } = req.body;
+  const { title, description, price, category, difficulty, instructor, image_url } = req.body;
   
   try {
     const result = await pool.query(
-      'INSERT INTO courses (title, description, price_cents, category, difficulty, instructor) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [title, description, Math.round(price * 100), category, difficulty, instructor]
+      'INSERT INTO courses (title, description, price_cents, category, difficulty, instructor, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [title, description, Math.round(price * 100), category, difficulty, instructor, image_url || null]
     );
     
     res.status(201).json({ ...result.rows[0], price: result.rows[0].price_cents / 100 });
@@ -149,12 +149,12 @@ app.post('/api/courses', authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 app.put('/api/courses/:id', authMiddleware, adminMiddleware, async (req, res) => {
-  const { title, description, price, category, difficulty, instructor } = req.body;
+  const { title, description, price, category, difficulty, instructor, image_url } = req.body;
   
   try {
     const result = await pool.query(
-      'UPDATE courses SET title=$1, description=$2, price_cents=$3, category=$4, difficulty=$5, instructor=$6, updated_at=NOW() WHERE id=$7 RETURNING *',
-      [title, description, Math.round(price * 100), category, difficulty, instructor, req.params.id]
+      'UPDATE courses SET title=$1, description=$2, price_cents=$3, category=$4, difficulty=$5, instructor=$6, image_url=$7, updated_at=NOW() WHERE id=$8 RETURNING *',
+      [title, description, Math.round(price * 100), category, difficulty, instructor, image_url || null, req.params.id]
     );
     
     if (!result.rows[0]) return res.status(404).json({ error: 'Course not found' });
