@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './App.css';
 
-const API = 'http://localhost:5000/api';
+const API = 'http://172.31.109.159:5000/api';
 
 // ========== AUTH CONTEXT ==========
 const AuthContext = React.createContext();
@@ -1039,7 +1039,7 @@ function AppContent() {
       </main>
 
       <footer className="footer">
-        <p>© 2025 Training Platform</p>
+        <p>© 2025 Kursy Velo</p>
       </footer>
     </div>
   );

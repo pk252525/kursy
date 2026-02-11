@@ -4,7 +4,6 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_mock');
 
 const app = express();
 app.use(express.json());
@@ -19,7 +18,7 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // ============ MIDDLEWARE ============
 const authMiddleware = (req, res, next) => {
@@ -271,7 +270,6 @@ app.delete('/api/cart/:courseId', authMiddleware, async (req, res) => {
 });
 
 // ============ PAYMENT ROUTES ============
-// Bezpośrednie przypisanie kursów do użytkownika (bez Stripe)
 app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
   console.log('=== CHECKOUT DIRECT ===');
   console.log('User ID:', req.user.userId);
@@ -281,7 +279,6 @@ app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
   try {
     await client.query('BEGIN');
     
-    // Pobierz kursy z koszyka
     const cartItems = await client.query(
       `SELECT c.* FROM courses c 
        INNER JOIN cart_items ci ON c.id = ci.course_id 
@@ -297,18 +294,15 @@ app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty' });
     }
     
-    // Zapisz użytkownika na każdy kurs
     for (const course of cartItems.rows) {
       console.log(`Przypisywanie kursu: ${course.title} (${course.id})`);
-      
-      // Dodaj enrollment
+
       const enrollResult = await client.query(
         'INSERT INTO enrollments (user_id, course_id) VALUES ($1, $2) ON CONFLICT (user_id, course_id) DO NOTHING RETURNING *',
         [req.user.userId, course.id]
       );
       console.log('Enrollment dodany:', enrollResult.rows.length > 0 ? 'TAK' : 'Już istniał');
       
-      // Zapisz transakcję jako "succeeded"
       await client.query(
         `INSERT INTO transactions (user_id, course_id, amount_cents, status)
          VALUES ($1, $2, $3, 'succeeded')`,
@@ -317,7 +311,6 @@ app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
       console.log('Transakcja zapisana');
     }
     
-    // Wyczyść koszyk
     await client.query('DELETE FROM cart_items WHERE user_id = $1', [req.user.userId]);
     console.log('Koszyk wyczyszczony');
     
@@ -333,7 +326,6 @@ app.post('/api/checkout/direct', authMiddleware, async (req, res) => {
   }
 });
 
-// Stripe checkout (opcjonalny, zachowany dla kompatybilności)
 app.post('/api/checkout', authMiddleware, async (req, res) => {
   try {
     const cartItems = await pool.query(
@@ -387,21 +379,18 @@ app.post('/api/webhook/stripe', express.raw({ type: 'application/json' }), async
       const courses = courseIds.split(',');
       
       for (const courseId of courses) {
-        // Record transaction
         await pool.query(
           `INSERT INTO transactions (user_id, course_id, amount_cents, status, stripe_checkout_session_id)
            SELECT $1, $2, price_cents, 'succeeded', $3 FROM courses WHERE id = $2`,
           [userId, courseId, session.id]
         );
         
-        // Enroll user in course
         await pool.query(
           'INSERT INTO enrollments (user_id, course_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
           [userId, courseId]
         );
       }
       
-      // Clear cart
       await pool.query('DELETE FROM cart_items WHERE user_id = $1', [userId]);
     }
     
@@ -538,4 +527,4 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on http://0.0.0.0:${PORT}`));
