@@ -94,6 +94,3 @@ CREATE TABLE reviews (
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(user_id, course_id)
 );
-
--- Dodanie kolumny content do istniejącej tabeli lessons
-ALTER TABLE lessons ADD COLUMN IF NOT EXISTS content JSONB;
